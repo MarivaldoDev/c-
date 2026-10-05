@@ -18,3 +18,4 @@ appsettings.Local.json
 appsettings.*.Local.json
 *.pfx
 *.snk
+*.txt

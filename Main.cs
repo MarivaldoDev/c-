@@ -2,8 +2,7 @@ using csharp;
 
 
 bool loop = true;
-while (loop)
-{
+while (loop){
     Console.WriteLine("[1] Create user\n[2] View users\n[3] View total users\n[4] Exit");
     Console.Write("Make your choice: ");
     string? input = Console.ReadLine();
@@ -18,27 +17,22 @@ while (loop)
                 Console.Write("Type your age: ");
                 string? entry = Console.ReadLine();
 
-                if (int.TryParse(entry, out int age))
-                {
+                if (int.TryParse(entry, out int age)){
                     Person person = new(name, age);
-                    SystemRegister.AddRegister(person.ToFormat(person));
+                    SystemRegister.AddRegister(person);
                     Console.WriteLine("Seus dados foram salvos.\n");
                 }
-                else
-                {
+                else{
                     Console.WriteLine("Digite um número inteiro válido.");
                 }
-
                 break;
             case 2:
                 Console.Clear();
-                SystemRegister.ViewRegisters();
-                
+                SystemRegister.ViewRegisters();          
                 break;
             case 3:
                 Console.Clear();
-                int total = SystemRegister.CountUsers();
-                Console.WriteLine($"Total users: {total}\n");
+                Console.WriteLine($"Total users: {SystemRegister.CountUsers()}\n");
                 break;
             case 4:
                 loop = false;
@@ -48,8 +42,7 @@ while (loop)
                 break;
         }
     }
-    else
-    {
+    else{
         Console.WriteLine("Erro: Você não digitou um número válido.");
     }
 }

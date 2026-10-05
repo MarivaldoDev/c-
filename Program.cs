@@ -1,47 +1,35 @@
 ﻿namespace csharp
 {
 
-    class Person(string? name, int age)
-    {
+    class Person(string? name, int age){
         public string name = name ?? string.Empty;
         public int age = age;
-
-        public Dictionary<string, int> ToFormat(Person person)
-        {
-            Dictionary<string, int> person_formated = new(){
-                {person.name, person.age}
-            };
-
-            return person_formated;
-        }
     }
 
-    class SystemRegister
-    {
-        static readonly List<Dictionary<string, int>> registers = [];
-        public static void AddRegister(Dictionary<string, int> person)
-        {
-            registers.Add(person);
+    class SystemRegister{
+        private const string FilePath = "registers.txt";
+        public static void AddRegister(Person person){
+
+            File.AppendAllText(FilePath, $"{person.name},{person.age}{Environment.NewLine}");
         }
 
         public static void ViewRegisters()
         {
-            Console.WriteLine($"{"Name",-12}{"Age",-5}\n");
-
-            foreach (var dicionario in registers)
+            
+            Console.WriteLine($"{"Name",-12}{"Age",-5}");
+            Console.WriteLine("-------------------");
+            foreach (var l in File.ReadLines(FilePath))
             {
-                foreach (var par in dicionario)
-                {
-                    Console.WriteLine($"{par.Key,-12}{par.Value,-5}");
-                }
+                var line = l.Split(",");
+                Console.WriteLine($"{line[0],-12}{line[1],-5}");
             }
-
+            
             Console.WriteLine("-------------------\n");
         }
 
         public static int CountUsers()
         {
-            return registers.Count;
+            return File.ReadAllLines(FilePath).Length;
         }
     }
 }
