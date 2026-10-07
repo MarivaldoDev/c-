@@ -1,35 +1,59 @@
-﻿namespace csharp
-{
+﻿namespace csharp;
 
-    class Person(string? name, int age){
-        public string name = name ?? string.Empty;
-        public int age = age;
+static class SystemRegister{
+    private const string FilePath = "registers.txt";
+    
+    public static void Menu(){
+        Console.WriteLine("[1] Create user\n[2] View users\n[3] View total users\n[4] Delete all\n[5] Exit");
+    }
+    public static void AddRegister(Person person){
+
+        File.AppendAllText(FilePath, $"{person.Id},{person.Name},{person.Age}\n");
     }
 
-    class SystemRegister{
-        private const string FilePath = "registers.txt";
-        public static void AddRegister(Person person){
-
-            File.AppendAllText(FilePath, $"{person.name},{person.age}{Environment.NewLine}");
+    public static void ViewRegisters(){
+        if (!File.Exists(FilePath)){
+            Console.WriteLine("No record.\n");
         }
-
-        public static void ViewRegisters()
-        {
-            
+        else{
             Console.WriteLine($"{"Name",-12}{"Age",-5}");
             Console.WriteLine("-------------------");
             foreach (var l in File.ReadLines(FilePath))
             {
-                var line = l.Split(",");
-                Console.WriteLine($"{line[0],-12}{line[1],-5}");
+                string[] line = l.Split(",");
+                Console.WriteLine($"{line[1],-12}{line[2],-5}");
             }
             
-            Console.WriteLine("-------------------\n");
+            Console.WriteLine("-------------------\n");  
+        } 
+    }
+
+    public static int CountUsers(){
+        if (!File.Exists(FilePath)){
+            return 0;
+        }
+        return File.ReadAllLines(FilePath).Length;
+    }
+
+    public static void DeleteAll(){
+        if (File.Exists(FilePath)){
+            File.Delete(FilePath);
+            Person.ResetIds();
+            Console.WriteLine("Registers deleted with success!\n");
+        }
+    }
+
+    public static int CurrentId(){
+        if (!File.Exists(FilePath)){
+            return 0;
         }
 
-        public static int CountUsers()
-        {
-            return File.ReadAllLines(FilePath).Length;
+        string? lastLine = File.ReadLines(FilePath).LastOrDefault();
+        if (string.IsNullOrWhiteSpace(lastLine)){
+            return 0;
         }
+
+        string[] fields = lastLine.Split(',');
+        return fields.Length > 0 && int.TryParse(fields[0], out int id) ? id : 0;
     }
 }

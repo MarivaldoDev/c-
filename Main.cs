@@ -1,9 +1,10 @@
 using csharp;
 
+Person.InitializeNextId(SystemRegister.CurrentId());
 
 bool loop = true;
 while (loop){
-    Console.WriteLine("[1] Create user\n[2] View users\n[3] View total users\n[4] Exit");
+    SystemRegister.Menu();
     Console.Write("Make your choice: ");
     string? input = Console.ReadLine();
     
@@ -17,13 +18,14 @@ while (loop){
                 Console.Write("Type your age: ");
                 string? entry = Console.ReadLine();
 
-                if (int.TryParse(entry, out int age)){
-                    Person person = new(name, age);
+                if (int.TryParse(entry, out int age) && age > 0){
+                    Person person = new(name ?? string.Empty, age);
                     SystemRegister.AddRegister(person);
-                    Console.WriteLine("Seus dados foram salvos.\n");
+                    
+                    Console.WriteLine("Your data has been saved.\n");
                 }
                 else{
-                    Console.WriteLine("Digite um número inteiro válido.");
+                    Console.WriteLine("Enter a valid integer.\n");
                 }
                 break;
             case 2:
@@ -35,6 +37,9 @@ while (loop){
                 Console.WriteLine($"Total users: {SystemRegister.CountUsers()}\n");
                 break;
             case 4:
+                SystemRegister.DeleteAll();
+                break;
+            case 5:
                 loop = false;
                 break;
             default:
@@ -43,6 +48,6 @@ while (loop){
         }
     }
     else{
-        Console.WriteLine("Erro: Você não digitou um número válido.");
+        Console.WriteLine("Error: You did not enter a valid number.");
     }
 }
