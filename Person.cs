@@ -1,5 +1,3 @@
-namespace csharp;
-
 class Person{
     private static int nextId = 1;
     public int Id { get; }

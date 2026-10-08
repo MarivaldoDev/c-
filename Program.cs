@@ -1,6 +1,4 @@
-﻿namespace csharp;
-
-static class SystemRegister{
+﻿static class SystemRegister{
     private const string FilePath = "registers.txt";
     
     public static void Menu(){

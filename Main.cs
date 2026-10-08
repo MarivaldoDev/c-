@@ -1,5 +1,3 @@
-using csharp;
-
 Person.InitializeNextId(SystemRegister.CurrentId());
 
 bool loop = true;
