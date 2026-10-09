@@ -2,28 +2,43 @@
     private const string FilePath = "registers.txt";
     
     public static void Menu(){
-        Console.WriteLine("[1] Create user\n[2] View users\n[3] View total users\n[4] Delete all\n[5] Exit");
+        Console.WriteLine("[1] Create user\n[2] View users\n[3] View total users\n[4] Search user\n[5] Delete all\n[6] Exit\n");
     }
     public static void AddRegister(Person person){
 
         File.AppendAllText(FilePath, $"{person.Id},{person.Name},{person.Age}\n");
     }
 
-    public static void ViewRegisters(){
+    public static void ViewRegisters(string? search = null){
         if (!File.Exists(FilePath)){
             Console.WriteLine("No record.\n");
+            return;
         }
-        else{
-            Console.WriteLine($"{"Name",-12}{"Age",-5}");
-            Console.WriteLine("-------------------");
-            foreach (var l in File.ReadLines(FilePath))
-            {
-                string[] line = l.Split(",");
-                Console.WriteLine($"{line[1],-12}{line[2],-5}");
+
+        bool found = false;
+        Console.WriteLine($"{"Name",-12}{"Age",-5}");
+        Console.WriteLine("-------------------");
+
+        foreach (var register in File.ReadLines(FilePath)){
+            if (!string.IsNullOrWhiteSpace(search) &&
+                !register.Contains(search, StringComparison.OrdinalIgnoreCase)){
+                continue;
             }
-            
-            Console.WriteLine("-------------------\n");  
-        } 
+
+            string[] fields = register.Split(',');
+            if (fields.Length < 3){
+                continue;
+            }
+
+            Console.WriteLine($"{fields[1],-12}{fields[2],-5}");
+            found = true;
+        }
+
+        if (!found && !string.IsNullOrWhiteSpace(search)){
+            Console.WriteLine("No matching record.");
+        }
+
+        Console.WriteLine("-------------------\n");
     }
 
     public static int CountUsers(){
